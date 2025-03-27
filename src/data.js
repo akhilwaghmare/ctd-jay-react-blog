@@ -9,7 +9,7 @@
 }
 */
 
-export const articles = [
+export const dummyArticles = [
   {
     title: "Getting Started with React",
     publicationDate: "2025-03-15",
@@ -49,5 +49,16 @@ export const articles = [
     imageUrl: "https://via.placeholder.com/600x400",
     author: "Emma Brown",
     tags: ["React", "State Management", "Redux", "Context API"],
+  },
+];
+
+export const dummyArticles2 = [
+  {
+    title: "Understanding React State and props",
+    publicationDate: "2025-03-27",
+    body: "React state and props are useful and cool!",
+    imageUrl: "https://via.placeholder.com/600x400",
+    author: "John Smith",
+    tags: ["React", "Hooks", "useState"],
   },
 ];

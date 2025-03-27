@@ -1,19 +1,29 @@
-import { articles } from "../data";
+import { useState } from "react";
 
-const ArticleList = () => {
+const ArticleList = ({ articles }) => {
   return (
     <div>
       {articles.map((article) => (
-        <div className="article">
-          <h1>{article.title}</h1>
-          <span>
-            {article.author} | {article.publicationDate}
-          </span>
-          {/* <img src={article.imageUrl} /> */}
-          <p>{article.body}</p>
-          <hr />
-        </div>
+        <ArticleCard article={article} />
       ))}
+    </div>
+  );
+};
+
+const ArticleCard = ({ article }) => {
+  const [isBodyHidden, setIsBodyHidden] = useState(false);
+
+  return (
+    <div className="article">
+      {/* NOTE: NEVER do what I did here and have an onClick on an <h1> for accessibility, wrap instead in something like a button */}
+      <h1 onClick={() => setIsBodyHidden((prev) => !prev)}>{article.title}</h1>
+      <span>
+        {article.author} | {article.publicationDate}
+      </span>
+      {/* <img src={article.imageUrl} /> */}
+      {!isBodyHidden && <p>{article.body}</p>}
+      {/* {isBodyHidden ? <p>Hidden</p> : <p>{article.body}</p>} */}
+      <hr />
     </div>
   );
 };

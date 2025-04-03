@@ -29,8 +29,3 @@ function App() {
 }
 
 export default App;
-
-// TODO
-// Header / navigation
-// Contact form
-// Could add videos as well

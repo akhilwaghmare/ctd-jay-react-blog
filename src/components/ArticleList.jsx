@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const ArticleList = ({ articles }) => {
   return (
-    <div>
+    <div className="articleList">
       {articles.map((article) => (
         <ArticleCard article={article} />
       ))}
@@ -22,7 +22,6 @@ const ArticleCard = ({ article }) => {
       </span>
       {/* <img src={article.imageUrl} /> */}
       {!isBodyHidden && <p>{article.body}</p>}
-      {/* {isBodyHidden ? <p>Hidden</p> : <p>{article.body}</p>} */}
       <hr />
     </div>
   );

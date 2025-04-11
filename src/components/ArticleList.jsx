@@ -16,14 +16,20 @@ const ArticleList = ({ articles }) => {
   return (
     <div className="articleList">
       <span># of articles opened: {articlesOpened.length}</span>
-      {articles.map((article) => (
-        <ArticleCard
-          key={article.id}
-          article={article}
-          // setNumArticlesOpened={setNumArticlesOpened}
-          addArticleToList={addArticleToList}
-        />
-      ))}
+      {articles.length === 0 ? (
+        <h1>No articles</h1>
+      ) : (
+        <>
+          {articles.map((article) => (
+            <ArticleCard
+              key={article.id}
+              article={article}
+              // setNumArticlesOpened={setNumArticlesOpened}
+              addArticleToList={addArticleToList}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 };

@@ -1,7 +1,31 @@
+import { useState, useEffect } from "react";
+
 const Header = () => {
+  const [reactStars, setReactStars] = useState(null);
+
+  const fetchReactStars = async () => {
+    try {
+      const res = await fetch("https://api.github.com/repos/facebook/react", {
+        method: "GET",
+      });
+      if (!res.ok) {
+        throw new Error("Error fetching repo stars");
+      }
+      const data = await res.json();
+      setReactStars(data["stargazers_count"]);
+    } catch (error) {
+      console.log("Error occured: ", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchReactStars();
+  }, []);
+
   return (
     <header>
       <h1>My React Blog</h1>
+      {reactStars && <p>Github stars: {reactStars}</p>}
       {/* TODO: Put navigation links */}
     </header>
   );

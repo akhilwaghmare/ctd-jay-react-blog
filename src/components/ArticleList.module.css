@@ -1,0 +1,29 @@
+.articleList {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.article {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.article h1 {
+  margin-bottom: 0.5rem;
+}
+
+.article span {
+  margin-bottom: 1rem;
+}
+
+.article p {
+  margin-bottom: 1rem;
+}
+
+.article hr {
+  height: 0.5px;
+  background-color: #a7a7a7;
+  border: none;
+}

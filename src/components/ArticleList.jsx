@@ -1,8 +1,9 @@
 import { useState } from "react";
+import styles from "./ArticleList.module.css";
 
 const ArticleList = ({ articles }) => {
   return (
-    <div className="articleList">
+    <div className={styles.articleList}>
       {articles.length === 0 ? (
         <h1>No articles</h1>
       ) : (
@@ -24,7 +25,7 @@ const ArticleCard = ({ article }) => {
   };
 
   return (
-    <div className="article">
+    <div className={styles.article}>
       {/* NOTE: NEVER do what I did here and have an onClick on an <h1> for accessibility, wrap instead in something like a button */}
       <h1 onClick={handleClick}>{article.title}</h1>
       <span>

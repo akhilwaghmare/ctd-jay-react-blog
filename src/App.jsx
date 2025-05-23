@@ -22,6 +22,44 @@ function App() {
     dispatch({ type: "updateArticles", payload: sortedArticles });
   };
 
+  const addArticle = async () => {
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
+    const todaysDate = formatter.format(new Date());
+
+    try {
+      const res = await fetch(
+        `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${
+          import.meta.env.VITE_TABLE_NAME
+        }`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_PAT}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: "Test",
+            publicationDate: todaysDate,
+            body: "Test body",
+            imageUrl: null,
+            author: "New User",
+          }),
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Error adding new article");
+      }
+      const data = await res.json();
+      console.log("New post:", data);
+    } catch (error) {
+      console.log("Error occured: ", error.message);
+    }
+  };
+
   return (
     <>
       <Header />

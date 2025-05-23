@@ -1,7 +1,10 @@
 import { useState } from "react";
 import styles from "./ArticleList.module.css";
+import { useArticleData } from "../providers/article-data";
 
-const ArticleList = ({ articles }) => {
+const ArticleList = () => {
+  const { articles } = useArticleData();
+
   return (
     <div className={styles.articleList}>
       {articles.length === 0 ? (

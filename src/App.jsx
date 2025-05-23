@@ -3,47 +3,13 @@ import ArticleList from "./components/ArticleList";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 
-import { useState, useEffect } from "react";
+import { useArticleData } from "./providers/article-data";
 
 function App() {
-  const [searchValue, setSearchValue] = useState("");
-
-  const [allArticles, setAllArticles] = useState([]);
-  const [articles, setArticles] = useState([]);
-
-  const fetchArticles = async () => {
-    try {
-      const res = await fetch(
-        `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${
-          import.meta.env.VITE_TABLE_NAME
-        }`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_PAT}`,
-          },
-        }
-      );
-      if (!res.ok) {
-        throw new Error("Error fetching articles");
-      }
-      const data = await res.json();
-      const articleData = data.records.map((r) => r.fields);
-      console.log(articleData);
-      setAllArticles(articleData);
-    } catch (error) {
-      console.log("Error occured: ", error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchArticles();
-  }, []);
-
-  const [sortOrder, setSortOrder] = useState("asc");
+  const { articles, searchValue, sortOrder, dispatch } = useArticleData();
 
   const handleSortChange = (event) => {
-    setSortOrder(event.target.value);
+    dispatch({ type: "updateSortOrder", payload: event.target.value });
 
     const sortedArticles = articles.toSorted((a, b) => {
       if (sortOrder === "asc") {
@@ -53,16 +19,8 @@ function App() {
       }
     });
 
-    setArticles(sortedArticles);
+    dispatch({ type: "updateArticles", payload: sortedArticles });
   };
-
-  useEffect(() => {
-    const filteredArticles = allArticles.filter((a) =>
-      a.title.toLowerCase().includes(searchValue.toLowerCase())
-    );
-
-    setArticles(filteredArticles);
-  }, [searchValue, allArticles]);
 
   return (
     <>
@@ -73,7 +31,9 @@ function App() {
           <input
             id="searchInput"
             value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
+            onChange={(e) =>
+              dispatch({ type: "updateSearchValue", payload: e.target.value })
+            }
           />
         </div>
         <div>
@@ -84,7 +44,7 @@ function App() {
           </select>
         </div>
       </form>
-      <ArticleList articles={articles} />
+      <ArticleList />
       <Footer />
     </>
   );

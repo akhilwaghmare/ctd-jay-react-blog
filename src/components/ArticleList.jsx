@@ -3,7 +3,15 @@ import styles from "./ArticleList.module.css";
 import { useArticleData } from "../providers/article-data";
 
 const ArticleList = () => {
-  const { articles } = useArticleData();
+  const { articles, isLoading } = useArticleData();
+
+  if (isLoading) {
+    return (
+      <div className={styles.articleList}>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.articleList}>

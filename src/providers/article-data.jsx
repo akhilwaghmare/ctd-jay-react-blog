@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
+import { getArticles } from "../db/query";
 
 const ArticleDataContext = createContext();
 
@@ -6,12 +7,13 @@ const initialState = {
   allArticles: [],
   articles: [],
   searchValue: "",
-  sortOrder: "asc",
+  sortOrder: "desc",
+  isLoading: true,
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "initialLoad":
+    case "loadAllArticles":
       return {
         ...state,
         allArticles: action.payload,
@@ -31,6 +33,11 @@ const reducer = (state, action) => {
         ...state,
         searchValue: action.payload,
       };
+    case "updateLoading":
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
     default:
       return state;
   }
@@ -44,31 +51,26 @@ export const ArticleDataProvider = ({ children }) => {
       a.title.toLowerCase().includes(state.searchValue.toLowerCase())
     );
 
-    dispatch({ type: "updateArticles", payload: filteredArticles });
-  }, [state.searchValue, state.allArticles]);
+    const sortedArticles = filteredArticles.toSorted((a, b) => {
+      if (state.sortOrder === "desc") {
+        return b.publicationDate.localeCompare(a.publicationDate);
+      } else {
+        return a.publicationDate.localeCompare(b.publicationDate);
+      }
+    });
+
+    dispatch({ type: "updateArticles", payload: sortedArticles });
+  }, [state.searchValue, state.allArticles, state.sortOrder]);
 
   const fetchArticles = async () => {
+    dispatch({ type: "updateLoading", payload: true });
     try {
-      const res = await fetch(
-        `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${
-          import.meta.env.VITE_TABLE_NAME
-        }`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_PAT}`,
-          },
-        }
-      );
-      if (!res.ok) {
-        throw new Error("Error fetching articles");
-      }
-      const data = await res.json();
-      const articleData = data.records.map((r) => r.fields);
-      console.log(articleData);
-      dispatch({ type: "initialLoad", payload: articleData });
+      const articleData = await getArticles();
+      dispatch({ type: "loadAllArticles", payload: articleData });
     } catch (error) {
       console.log("Error occured: ", error.message);
+    } finally {
+      dispatch({ type: "updateLoading", payload: false });
     }
   };
 
@@ -76,13 +78,31 @@ export const ArticleDataProvider = ({ children }) => {
     fetchArticles();
   }, []);
 
+  const getArticleWithId = (id) => {
+    const article = state.allArticles.filter((a) => a.id == id)[0];
+    return article;
+  };
+
+  const getArticleWithSlug = (slug) => {
+    const article = state.allArticles.filter((a) => a.slug == slug)[0];
+    return article;
+  };
+
+  const refreshArticleData = () => {
+    fetchArticles();
+  };
+
   return (
     <ArticleDataContext.Provider
       value={{
         articles: state.articles,
         searchValue: state.searchValue,
         sortOrder: state.sortOrder,
+        isLoading: state.isLoading,
         dispatch,
+        getArticleWithId,
+        getArticleWithSlug,
+        refreshArticleData,
       }}
     >
       {children}

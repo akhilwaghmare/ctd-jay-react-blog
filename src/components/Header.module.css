@@ -1,4 +1,11 @@
 .header {
   padding-top: 2rem;
   padding-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header nav {
+  display: flex;
+  gap: 16px;
 }

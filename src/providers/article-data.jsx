@@ -78,6 +78,20 @@ export const ArticleDataProvider = ({ children }) => {
     fetchArticles();
   }, []);
 
+  const getArticleWithId = (id) => {
+    const article = state.allArticles.filter((a) => a.id == id)[0];
+    return article;
+  };
+
+  const getArticleWithSlug = (slug) => {
+    const article = state.allArticles.filter((a) => a.slug == slug)[0];
+    return article;
+  };
+
+  const refreshArticleData = () => {
+    fetchArticles();
+  };
+
   return (
     <ArticleDataContext.Provider
       value={{
@@ -86,6 +100,9 @@ export const ArticleDataProvider = ({ children }) => {
         sortOrder: state.sortOrder,
         isLoading: state.isLoading,
         dispatch,
+        getArticleWithId,
+        getArticleWithSlug,
+        refreshArticleData,
       }}
     >
       {children}

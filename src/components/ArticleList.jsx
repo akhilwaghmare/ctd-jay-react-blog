@@ -1,6 +1,6 @@
-import { useState } from "react";
 import styles from "./ArticleList.module.css";
 import { useArticleData } from "../providers/article-data";
+import { useNavigate } from "react-router-dom";
 
 const ArticleList = () => {
   const { articles, isLoading } = useArticleData();
@@ -29,10 +29,10 @@ const ArticleList = () => {
 };
 
 const ArticleCard = ({ article }) => {
-  const [isBodyHidden, setIsBodyHidden] = useState(true);
+  const router = useNavigate();
 
   const handleClick = () => {
-    setIsBodyHidden((prev) => !prev);
+    router(`/article/${article.id}`);
   };
 
   return (
@@ -42,8 +42,6 @@ const ArticleCard = ({ article }) => {
       <span>
         {article.author} | {article.publicationDate}
       </span>
-      {/* <img src={article.imageUrl} /> */}
-      {!isBodyHidden && <p>{article.body}</p>}
       <hr />
     </div>
   );

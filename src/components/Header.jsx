@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./Header.module.css";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [reactStars, setReactStars] = useState(null);
@@ -25,9 +26,15 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      <h1>My React Blog</h1>
-      {reactStars && <p>Github stars: {reactStars}</p>}
-      {/* TODO: Put navigation links */}
+      <div>
+        <h1>My React Blog</h1>
+        {reactStars && <p>Github stars: {reactStars}</p>}
+      </div>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Link to="/create">Create</Link>
+      </nav>
     </header>
   );
 };
